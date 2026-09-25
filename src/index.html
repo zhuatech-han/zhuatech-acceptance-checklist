@@ -1,0 +1,197 @@
+<!doctype html>
+<!--
+  知华科技（上海如静知华信息科技有限公司）
+  官网：https://www.zhuatech.cn/
+  商业授权、定制开发、部署与系统集成咨询微信：zhuatech / zhuatech2
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="外包软件交付前怎么核对？按网站、小程序、企业系统或源码移交场景建立清单，记录问题证据，导出待整改清单给供应商。知华科技免费网页工具。">
+  <meta property="og:title" content="外包软件交付核对与整改清单｜知华科技">
+  <meta property="og:description" content="按交付场景核对网站、小程序或企业系统，记录未完成事项，导出待整改清单给供应商。">
+  <title>外包软件交付核对与整改清单｜知华科技</title>
+  <link rel="icon" href="./logo.jpg">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="https://www.zhuatech.cn/" target="_blank" rel="noopener noreferrer" aria-label="知华科技官网">
+        <img src="./logo.jpg" alt="知华科技 LOGO" width="42" height="42">
+        <span>知华科技</span>
+      </a>
+      <a class="header-link" href="https://www.zhuatech.cn/" target="_blank" rel="noopener noreferrer">访问官网 <span aria-hidden="true">↗</span></a>
+    </div>
+  </header>
+
+  <main class="shell">
+    <div class="page-heading">
+      <div>
+        <p class="eyebrow">外包软件交付前，先把问题查清楚</p>
+        <h1>交付核对与整改清单</h1>
+        <p class="page-heading__description">收到网站、小程序或企业系统的交付通知？按项目场景逐项核对，写下没做完的事和证据，导出清单发给供应商整改。</p>
+        <p class="page-heading__example">例如：官网改版后，手机提交咨询表单却收不到。记录测试截图与责任人，再导出问题清单发给开发商。</p>
+        <p class="page-heading__audience">适合甲方项目负责人、业务人员和接管系统的 IT 人员。检查项需按合同和实际交付内容调整。</p>
+      </div>
+      <div class="privacy-note" role="note">
+        <strong>记录保存在当前浏览器</strong>
+        <span>无需登录，不会上传。换设备或清理浏览器前，请导出 JSON 备份。</span>
+      </div>
+    </div>
+
+    <div id="storageWarning" class="warning-banner" role="alert" hidden></div>
+
+    <section class="panel project-panel" aria-labelledby="projectHeading">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">第一步 · 建清单</p>
+          <h2 id="projectHeading">选择交付场景，填写项目资料</h2>
+          <p id="templateDescription" class="section-description"></p>
+        </div>
+        <div class="project-actions">
+          <button type="button" id="newProjectButton" class="button button--primary">按场景新建清单</button>
+          <button type="button" id="deleteProjectButton" class="button button--quiet">删除当前项目</button>
+        </div>
+      </div>
+      <div class="project-fields">
+        <label class="field field--select">
+          <span>选择项目</span>
+          <select id="projectSelect"></select>
+        </label>
+        <label class="field field--name">
+          <span>项目名称</span>
+          <input id="projectName" type="text" maxlength="120" autocomplete="off" placeholder="填写项目名称">
+        </label>
+        <label class="field">
+          <span>交付版本</span>
+          <input id="projectVersion" type="text" maxlength="120" autocomplete="off" placeholder="如：V1.0">
+        </label>
+        <label class="field">
+          <span>验收日期</span>
+          <input id="acceptanceDate" type="date">
+        </label>
+      </div>
+      <div class="export-actions">
+        <button type="button" id="exportIssuesButton" class="button button--primary">导出待整改清单</button>
+        <button type="button" id="exportCsvButton" class="button button--secondary">导出完整核对记录</button>
+        <button type="button" id="printButton" class="button button--secondary">打印 / 存为 PDF</button>
+        <button type="button" id="exportJsonButton" class="button button--secondary">导出 JSON 备份</button>
+        <button type="button" id="importJsonButton" class="button button--quiet">导入备份</button>
+        <input id="backupInput" type="file" accept=".json,application/json" hidden>
+      </div>
+    </section>
+
+    <section class="summary" aria-label="人工填写的结果统计">
+      <div class="summary-card"><span>待检查</span><strong id="pendingCount">0</strong></div>
+      <div class="summary-card"><span>通过</span><strong id="passedCount">0</strong></div>
+      <div class="summary-card"><span>未通过</span><strong id="failedCount">0</strong></div>
+      <div class="summary-card"><span>不适用</span><strong id="naCount">0</strong></div>
+      <div class="summary-card summary-card--attention"><span>记录待补</span><strong id="gapCount">0</strong></div>
+    </section>
+    <p class="summary-note">填写约定标准、结果和证据。未通过时补上问题及负责人；待整改清单只含未通过项，待检查项仍需继续核对。统计不代表正式验收结论。</p>
+
+    <section class="panel items-panel" aria-labelledby="itemsHeading">
+      <div class="section-heading section-heading--items">
+        <div>
+          <p class="section-kicker">第二步 · 逐项核对</p>
+          <h2 id="itemsHeading">交付检查项 <span id="itemTotal" class="heading-count"></span></h2>
+        </div>
+        <button type="button" id="addItemButton" class="button button--primary">新增检查项</button>
+      </div>
+      <div class="list-controls">
+        <label class="field search-field">
+          <span class="sr-only">搜索检查项</span>
+          <input id="searchInput" type="search" placeholder="搜索编号、领域或检查点">
+        </label>
+        <label class="field filter-field">
+          <span class="sr-only">筛选结果</span>
+          <select id="statusFilter">
+            <option value="all">全部结果</option>
+            <option value="待检查">待检查</option>
+            <option value="通过">通过</option>
+            <option value="未通过">未通过</option>
+            <option value="不适用">不适用</option>
+            <option value="gaps">记录待补</option>
+          </select>
+        </label>
+      </div>
+      <div class="list-header" aria-hidden="true"><span>检查项</span><span>结果</span><span>操作</span></div>
+      <div id="itemList" class="item-list"></div>
+      <p id="listEmpty" class="empty-state" hidden>没有匹配的检查项。</p>
+    </section>
+
+    <aside class="service-note" aria-label="交付问题咨询">
+      <div>
+        <strong>源码、数据、接口或部署资料交不齐，项目接不下来？</strong>
+        <p>知华科技可协助做交付检查、系统接管、补救开发与独立部署。说明项目类型、当前卡点和计划时间，便于判断处理范围。</p>
+      </div>
+      <a href="https://www.zhuatech.cn/" target="_blank" rel="noopener noreferrer">联系知华科技：官网 ↗</a>
+      <span>微信 zhuatech / zhuatech2</span>
+    </aside>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <span>© 2026 上海如静知华信息科技有限公司</span>
+      <span>定制开发、部署、系统集成及源码商业授权：微信 <strong>zhuatech</strong> / <strong>zhuatech2</strong></span>
+    </div>
+  </footer>
+
+  <dialog id="itemDialog" class="editor-dialog" aria-labelledby="editorTitle">
+    <form id="itemForm">
+      <div class="dialog-heading">
+        <div>
+          <p class="section-kicker">检查记录</p>
+          <h2 id="editorTitle">填写检查项</h2>
+        </div>
+        <button type="button" id="closeEditorButton" class="icon-button" aria-label="关闭编辑窗口">×</button>
+      </div>
+      <div class="editor-grid">
+        <label class="field"><span>编号</span><input name="code" type="text" maxlength="40" required></label>
+        <label class="field"><span>领域</span><input name="category" type="text" maxlength="80" required></label>
+        <label class="field field--wide"><span>检查点</span><input name="title" type="text" maxlength="240" required></label>
+        <label class="field field--wide"><span>项目约定标准及依据</span><textarea name="criterion" rows="3" maxlength="5000" placeholder="填写合同条款、需求编号、版本及可判定的标准"></textarea></label>
+        <label class="field"><span>结果</span><select name="status"><option>待检查</option><option>通过</option><option>未通过</option><option>不适用</option></select></label>
+        <label class="field"><span>责任人</span><input name="owner" type="text" maxlength="120"></label>
+        <label class="field field--wide"><span>证据位置或不适用确认记录</span><textarea name="evidence" rows="2" maxlength="5000" placeholder="如：测试报告章节、文件名或内部链接"></textarea></label>
+        <label class="field field--wide"><span>问题与处理</span><textarea name="issue" rows="3" maxlength="5000" placeholder="未通过时写明问题、处理动作和责任边界"></textarea></label>
+        <label class="field"><span>复测日期</span><input name="retestDate" type="date"></label>
+      </div>
+      <div class="dialog-actions">
+        <button type="button" id="deleteItemButton" class="button button--danger">删除此项</button>
+        <div>
+          <button type="button" id="cancelEditorButton" class="button button--secondary">取消</button>
+          <button type="submit" class="button button--primary">保存记录</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="projectDialog" class="project-dialog" aria-labelledby="newProjectTitle">
+    <form id="projectForm">
+      <h2 id="newProjectTitle">按交付场景建清单</h2>
+      <label class="field"><span>交付场景</span><select name="templateId" id="templateSelect"></select></label>
+      <p id="newProjectHint" class="dialog-hint"></p>
+      <label class="field"><span>项目名称</span><input name="newProjectName" type="text" maxlength="120" required placeholder="如：官网改版项目"></label>
+      <div class="dialog-actions"><button type="button" id="cancelProjectButton" class="button button--secondary">取消</button><button type="submit" class="button button--primary">创建清单</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="confirmDialog" class="confirm-dialog" aria-labelledby="confirmTitle">
+    <form method="dialog">
+      <h2 id="confirmTitle">请确认</h2>
+      <p id="confirmMessage"></p>
+      <div class="dialog-actions">
+        <button type="submit" value="cancel" class="button button--secondary">取消</button>
+        <button type="submit" value="yes" id="confirmYesButton" class="button button--danger">确认</button>
+      </div>
+    </form>
+  </dialog>
+
+  <section id="printReport" class="print-report" aria-label="可打印的验收记录"></section>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
