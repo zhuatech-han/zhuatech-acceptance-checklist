@@ -6,6 +6,16 @@
 
 [查看虚构的待整改清单导出样例](docs/示例-官网改版待整改清单.csv)。
 
+## 界面预览
+
+以下页面使用虚构的“官网改版交付”项目演示。
+
+![选择交付场景、填写项目资料并查看核对结果统计](docs/images/product-overview.jpg)
+
+![逐项核对交付检查项并标记未通过问题](docs/images/product-checklist.jpg)
+
+![填写未通过问题的依据、责任人、证据和整改说明](docs/images/product-record.jpg)
+
 ## 在线试用
 
 [打开交付核对与整改清单](https://zhuatech-han.github.io/zhuatech-acceptance-checklist/)。试用页面托管在 GitHub Pages，访问时需要能连接该域名的网络环境；自行部署后，使用者只需访问自行配置的站点地址。
