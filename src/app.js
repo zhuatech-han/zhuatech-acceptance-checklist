@@ -20,7 +20,7 @@ const dom = {
   projectDialog: $('projectDialog'), projectForm: $('projectForm'), backupInput: $('backupInput'),
   confirmDialog: $('confirmDialog'), confirmMessage: $('confirmMessage'), confirmYesButton: $('confirmYesButton'),
   storageWarning: $('storageWarning'), toast: $('toast'), printReport: $('printReport'),
-  templateDescription: $('templateDescription'), templateSelect: $('templateSelect'),
+  templateSelect: $('templateSelect'),
   newProjectHint: $('newProjectHint'), exportIssuesButton: $('exportIssuesButton'),
 };
 
@@ -91,10 +91,6 @@ function renderProjectFields() {
   dom.projectName.value = project.name;
   dom.projectVersion.value = project.version;
   dom.acceptanceDate.value = project.acceptanceDate;
-  const template = TEMPLATES[project.templateId];
-  dom.templateDescription.textContent = template
-    ? `${template.name}：${template.description}`
-    : '通用检查提示：请按项目实际合同和需求调整。';
 }
 
 function renderSummary() {

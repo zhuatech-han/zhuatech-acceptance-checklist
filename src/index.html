@@ -29,17 +29,9 @@
 
   <main class="shell">
     <div class="page-heading">
-      <div>
-        <p class="eyebrow">外包软件交付前，先把问题查清楚</p>
-        <h1>交付核对与整改清单</h1>
-        <p class="page-heading__description">收到网站、小程序或企业系统的交付通知？按项目场景逐项核对，写下没做完的事和证据，导出清单发给供应商整改。</p>
-        <p class="page-heading__example">例如：官网改版后，手机提交咨询表单却收不到。记录测试截图与责任人，再导出问题清单发给开发商。</p>
-        <p class="page-heading__audience">适合甲方项目负责人、业务人员和接管系统的 IT 人员。检查项需按合同和实际交付内容调整。</p>
-      </div>
-      <div class="privacy-note" role="note">
-        <strong>记录保存在当前浏览器</strong>
-        <span>无需登录，不会上传。换设备或清理浏览器前，请导出 JSON 备份。</span>
-      </div>
+      <h1>交付核对与整改清单</h1>
+      <p class="page-heading__description">按场景核对交付，记录问题并导出整改清单。</p>
+      <p class="privacy-hint">记录仅存当前浏览器；换设备前请导出备份。</p>
     </div>
 
     <div id="storageWarning" class="warning-banner" role="alert" hidden></div>
@@ -47,9 +39,7 @@
     <section class="panel project-panel" aria-labelledby="projectHeading">
       <div class="section-heading">
         <div>
-          <p class="section-kicker">第一步 · 建清单</p>
-          <h2 id="projectHeading">选择交付场景，填写项目资料</h2>
-          <p id="templateDescription" class="section-description"></p>
+          <h2 id="projectHeading">项目</h2>
         </div>
         <div class="project-actions">
           <button type="button" id="newProjectButton" class="button button--primary">按场景新建清单</button>
@@ -91,12 +81,9 @@
       <div class="summary-card"><span>不适用</span><strong id="naCount">0</strong></div>
       <div class="summary-card summary-card--attention"><span>记录待补</span><strong id="gapCount">0</strong></div>
     </section>
-    <p class="summary-note">填写约定标准、结果和证据。未通过时补上问题及负责人；待整改清单只含未通过项，待检查项仍需继续核对。统计不代表正式验收结论。</p>
-
     <section class="panel items-panel" aria-labelledby="itemsHeading">
       <div class="section-heading section-heading--items">
         <div>
-          <p class="section-kicker">第二步 · 逐项核对</p>
           <h2 id="itemsHeading">交付检查项 <span id="itemTotal" class="heading-count"></span></h2>
         </div>
         <button type="button" id="addItemButton" class="button button--primary">新增检查项</button>
@@ -123,14 +110,6 @@
       <p id="listEmpty" class="empty-state" hidden>没有匹配的检查项。</p>
     </section>
 
-    <aside class="service-note" aria-label="交付问题咨询">
-      <div>
-        <strong>源码、数据、接口或部署资料交不齐，项目接不下来？</strong>
-        <p>知华科技可协助做交付检查、系统接管、补救开发与独立部署。说明项目类型、当前卡点和计划时间，便于判断处理范围。</p>
-      </div>
-      <a href="https://www.zhuatech.cn/" target="_blank" rel="noopener noreferrer">联系知华科技：官网 ↗</a>
-      <span>微信 zhuatech / zhuatech2</span>
-    </aside>
   </main>
 
   <footer class="site-footer">
@@ -144,7 +123,6 @@
     <form id="itemForm">
       <div class="dialog-heading">
         <div>
-          <p class="section-kicker">检查记录</p>
           <h2 id="editorTitle">填写检查项</h2>
         </div>
         <button type="button" id="closeEditorButton" class="icon-button" aria-label="关闭编辑窗口">×</button>
