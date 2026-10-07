@@ -65,6 +65,9 @@ scripts/build.mjs   Copy source assets into dist
 scripts/dev.mjs     Local-only preview server
 tests/core.test.mjs Scene, record, CSV and backup tests
 docs/               Chinese manual, actual screenshots and fictional sample
+Dockerfile / compose.yaml  Optional Nginx container deployment
+.env.example        Container bind address and port
+deploy/nginx.conf   Static routing and /health
 LICENSE / NOTICE    Existing own-source license and attribution
 ```
 
@@ -86,7 +89,7 @@ To change the preview port, for example to avoid another running project:
 PORT=18183 npm run dev
 ```
 
-No `.env`, database credentials, API keys or third-party integration configuration is needed.
+Node preview requires no `.env`, database credentials, API keys or third-party integrations. Optional container configuration is listed in [.env.example](.env.example).
 
 ## Initialization, storage and backup
 
@@ -108,13 +111,26 @@ npm run build
 
 `lint` performs JavaScript syntax checks; there is no separate formatter configured. Six Node tests cover default pending prompts, missing evidence/responsibility, scene templates and old backups, CSV quoting/formula neutralization, failed-only export and backup round-trip/rejection of invalid or duplicate records.
 
-There are no backend, MySQL or Docker services, so backend/database/migration/image checks are not applicable. Browser editing and persistence must be verified separately; automated data tests do not certify a delivered customer's software.
+There is no business backend or MySQL database, so backend/database/migration checks are not applicable. The existing optional Docker Compose deployment provides a static Nginx service and requires its own configuration, image and health checks. Browser editing and persistence must be verified separately; automated data tests do not certify a delivered customer's software.
 
 ## Static deployment and upgrades
 
 `npm run build` produces `dist/` with `index.html`, CSS, JavaScript modules and the logo. Deploy those files to a static HTTPS host accessible to intended reviewers. The existing root landing file redirects to `./dist/`; serving `dist/` directly uses its own index. No application server/database setup is required.
 
 Each browser still stores its own data; deploying static assets does not add synchronization. Before upgrading or moving the site, export JSON and verify restoration in an isolated browser. Keep client backups outside the source and deployment package. See the Chinese [operations manual](docs/操作手册.md) for records, evidence and exports.
+
+### Existing Docker Compose deployment
+
+Docker/Compose serves the same browser-local application through Nginx 1.29. Its Node 24.19 build stage runs syntax checks, tests and asset generation; there is no server-side business state.
+
+```sh
+docker compose config --quiet
+docker compose up --build -d --wait
+```
+
+Default address: `http://127.0.0.1:4174/`; health: `/health`. `WEB_BIND_ADDRESS` defaults to `127.0.0.1`; `WEB_PORT` defaults to `4174` and can be changed, for example to `18174`. No passwords are needed. The Dockerfile uses a non-root Nginx runtime without CDN dependencies. Stop this service with `docker compose down`; browser records remain in their original site origin.
+
+The root [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md) describe contribution and private security reporting. Run `npm run check:release` (or `node scripts/verify-release.mjs`) to check README images, both original QR assets, licensing and example configuration; it does not replace actual workflow or deployment checks.
 
 ## Known limits and feedback
 
